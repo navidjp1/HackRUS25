@@ -3,6 +3,8 @@ from time import sleep
 from obtain import extract_text_from_url
 
 
+PARTITION_SIZE = 5000  # change this value as per your requirement
+
 def get_body(text):
 
     start_match = re.search(r"START OF THE PROJECT GUTENBERG EBOOK", text, re.IGNORECASE)
@@ -36,7 +38,7 @@ def split_text(text):
            continue
         
         cur_count += count
-        if cur_count > 20000:
+        if cur_count > PARTITION_SIZE:
             partition.append(cur_part)
             cur_count = 0
             cur_part = ""
