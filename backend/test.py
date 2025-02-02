@@ -1,6 +1,6 @@
 from translate import translate_text
 from obtain import extract_text_from_url
-from split import split_text
+from split import split_text, count_alphanumeric
 from kokoro import KPipeline
 from IPython.display import display, Audio
 import numpy as np
@@ -11,19 +11,25 @@ import soundfile as sf
 
 
 url1 = "https://www.gutenberg.org/cache/epub/25344/pg25344.txt"
-url2 = "https://www.gutenberg.org/cache/epub/98/pg98.txt"
+url2 = "https://www.gutenberg.org/cache/epub/98/pg98.txt" # very long
 url3 = "https://www.gutenberg.org/cache/epub/1184/pg1184.txt" # very long
 url4 = "https://www.gutenberg.org/cache/epub/43/pg43.txt" # short
+url5 = 'https://www.gutenberg.org/cache/epub/11/pg11.txt'
 
-url = url4
+url = url5
 
 book_id = url.split('/')[-2]
 
-text = extract_text_from_url(url)
-parts = split_text(text)
 
-translated_text = translate_text(parts[0], 'Spanish')
-print(translated_text)
+text = extract_text_from_url(url)
+
+print (count_alphanumeric(text))
+parts = split_text(text, 2000)
+
+print(len(parts))
+
+for i, part in enumerate(parts):
+    print(f"Part {i+1}: {len(part)}")
 
 
 # pipeline = KPipeline(lang_code='a') # <= make sure lang_code matches voice

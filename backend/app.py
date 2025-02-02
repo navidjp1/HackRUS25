@@ -25,6 +25,29 @@ lang_codes = {
     "portuguese": "p"
 }
 
+voice_types = {
+    "english": {
+        "Female Voice": "af_heart",
+        "Male Voice": "am_michael"
+    },
+    "spanish": {
+        "Female Voice": "ef_dora",
+        "Male Voice": "em_alex"
+    },
+    "french": {
+        "Female Voice": "ff_siwis",
+        "Male Voice": "am_michael"
+    },
+    "hindi": {
+        "Female Voice": "hf_alpha",
+        "Male Voice": "hm_omega"
+    },
+    "portuguese": {
+        "Female Voice": "pf_dora",
+        "Male Voice": "pm_alex"
+    },
+}
+
 
 @app.route('/generate', methods=['POST'])
 def generate_wav():
@@ -54,7 +77,8 @@ def generate_wav():
         code = lang_codes.get(language.lower(), "a")
         pipeline = KPipeline(lang_code=code)
 
-        voiceType = 'af_heart' if voiceType == 'Female Voice' else 'am_michael'
+        voiceTypeRegion = voice_types.get(language.lower(), {"Female Voice": "af_heart", "Male Voice": "am_michael"})
+        voiceType = voiceTypeRegion.get(voiceType, "af_heart")
 
         generator = pipeline(
             translated_text, voice=voiceType,

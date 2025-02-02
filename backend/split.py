@@ -3,8 +3,6 @@ from time import sleep
 from obtain import extract_text_from_url
 
 
-PARTITION_SIZE = 5000  # change this value as per your requirement
-
 def get_body(text):
 
     start_match = re.search(r"START OF THE PROJECT GUTENBERG EBOOK", text, re.IGNORECASE)
@@ -25,20 +23,21 @@ def count_alphanumeric(string):
       count += 1
   return count    
 
-def split_text(text):
+def split_text(text, partition_size=5000):
     body = get_body(text)
     splits = re.split(r"(\r\n){3,}", body)
     cur_count = 0
     cur_part = ""
     partition = []
     for item in splits:
-        count = count_alphanumeric(item)
         cur_part += item
-        if count < 150:
+        count = count_alphanumeric(item)
+
+        if count < 100:
            continue
         
         cur_count += count
-        if cur_count > PARTITION_SIZE:
+        if cur_count > partition_size:
             partition.append(cur_part)
             cur_count = 0
             cur_part = ""
